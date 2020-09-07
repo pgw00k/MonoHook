@@ -254,7 +254,12 @@ public unsafe class MethodHook
     private void PatchProxyMethod()
     {
         if (_proxyPtr == IntPtr.Zero)
+        {
+#if DEBUG
+            Console.WriteLine("_proxyPtr is zero.");
+#endif
             return;
+        }
 
         EnableAddrModifiable(_proxyPtr, (uint)_proxyBuff.Length);
         byte * pProxy = (byte*)_proxyPtr.ToPointer();

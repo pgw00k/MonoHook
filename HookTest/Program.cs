@@ -16,7 +16,6 @@ namespace HookTest
             Shell.OpenConsole();
             Console.WriteLine("Run!");
 
-
             //测试是否能够正常加载 MonoHook插件到内存中
             //需要放置在和.exe文件相同路径下，即工作路径下
             Assembly ass = Assembly.LoadFrom("MonoHook.dll");
@@ -46,12 +45,14 @@ namespace HookTest
         public static void NewMethod()
         {
             Console.WriteLine("NewMethod In.");
+
+            //需要在新指向中重新主动调用占位的旧方法，即可达到调用旧方法的效果
+            DoOld();
         }
 
         /// <summary>
         /// 用来占位的旧方法（可以不写内容）
         /// </summary> 
-        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void DoOld()
         {
             Console.WriteLine("Old");
@@ -76,7 +77,7 @@ namespace HookTest
             }
 
             //获取类型上的目标方法
-            MethodInfo miTarget = type.GetMethod("HookMethod");
+            MethodInfo miTarget = type.GetMethod("HookStatic");
             if (miTarget != null)
             {
                 Console.WriteLine("Get target Method " + miTarget.Name);

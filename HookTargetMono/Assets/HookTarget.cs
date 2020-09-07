@@ -17,9 +17,9 @@ public class HookTarget : MonoBehaviour
     }
 
     public void HookStatic()
-    {
-        Console.WriteLine("HookStatic");
+    {        
         Log.text = HookStaticString;
+        Console.WriteLine("HookStatic");
     }
 
     public void Start()
