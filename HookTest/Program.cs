@@ -30,34 +30,43 @@ namespace HookTest
             }
 
             //开始Hook
+            HookUI.Start();
             HookClass.HookMethod();
-
+                  
         }
     }
 
+    public class HookUIMono: UnityEngine.MonoBehaviour
+    {
+        public void OnGUI()
+        {
+            if (UnityEngine.GUILayout.Button("Test"))
+            {
+                Console.WriteLine("Test");
+                HookTarget.StaticOutput();
+            }
+
+            if (UnityEngine.GUILayout.Button("HookMethodWithParam"))
+            {
+                HookClass.HookMethodWithParam();
+            }
+        }
+    }
+
+    public class HookUI
+    {
+        protected static UnityEngine.GameObject _Instance = null;
+
+        public static void Start()
+        {
+            _Instance = new UnityEngine.GameObject("HookUI");
+            HookUIMono UIMono = _Instance.AddComponent<HookUIMono>();
+        }
+    }
+
+
     public class HookClass
     {
-
-        /// <summary>
-        /// 将要被调用的新方法
-        /// </summary>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void NewMethod()
-        {
-            Console.WriteLine("NewMethod In.");
-
-            //需要在新指向中重新主动调用占位的旧方法，即可达到调用旧方法的效果
-            DoOld();
-        }
-
-        /// <summary>
-        /// 用来占位的旧方法（可以不写内容）
-        /// </summary> 
-        public static void DoOld()
-        {
-            Console.WriteLine("Old");
-        }
-
         /// <summary>
         /// 执行Hook方法的入口，直接在注入成功后调用
         /// </summary>
@@ -131,6 +140,77 @@ namespace HookTest
             //MethodHook _hook = new MethodHook(miTarget, miReplacement, null);
 
             _hook.Install();
+        }
+
+
+        /// <summary>
+        /// Hook带有参数的方法的例子
+        /// </summary>
+        public static void HookMethodWithParam()
+        {
+            Console.WriteLine("HookMethodWithParam Start.");
+            //获取需要Hook的类型
+            Type type = Type.GetType("HookTarget,Assembly-CSharp.dll");
+            //获取类型上的目标方法
+            MethodInfo miTarget = type.GetMethod("TargetMethodWithParam");
+
+            //Hook后重新定向的新方法，这里直接指向本类
+            type = typeof(HookClass);
+
+            // 找到本类上 名为 NewMethod 的方法，准备替换目标方法
+            MethodInfo miReplacement = type.GetMethod("NewMethodWithParam", BindingFlags.Static | BindingFlags.Public);
+
+            // 这个方法是用来调用原始方法的，在这里也可以在本类中声明一个 DoOld 方法用来占位
+            MethodInfo miProxy = type.GetMethod("DoOldWithParam", BindingFlags.Static | BindingFlags.Public);
+
+            // 创建一个 Hook 并 Install ，这样就能把方法都重定向到新方法来
+            MethodHook _hook = new MethodHook(miTarget, miReplacement, miProxy);
+
+            _hook.Install();
+        }
+
+        /// <summary>
+        /// 将要被调用的新方法
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void NewMethod()
+        {
+            Console.WriteLine("NewMethod In.");
+
+            //需要在新指向中重新主动调用占位的旧方法，即可达到调用旧方法的效果
+            DoOld();
+        }
+
+        /// <summary>
+        /// 用来占位的旧方法（可以不写内容）
+        /// </summary>     
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void DoOld()
+        {
+            Console.WriteLine("Old");
+        }
+
+
+        /// <summary>
+        /// 将要被调用的新方法
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void NewMethodWithParam(string s)
+        {
+            Console.WriteLine("NewMethodWithParam In.");
+            Console.WriteLine("Param is " + s);
+
+            //需要在新指向中重新主动调用占位的旧方法，即可达到调用旧方法的效果
+            DoOldWithParam(s);
+        }
+
+        /// <summary>
+        /// 用来占位的旧方法（可以不写内容）
+        /// </summary>     
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void DoOldWithParam(string s)
+        {
+            Console.WriteLine("DoOldWithParam");
         }
     }
 }
