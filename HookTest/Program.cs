@@ -29,11 +29,14 @@ namespace HookTest
                 return;
             }
 
+            #if !MINI
             //开始Hook
-            HookUI.Start();           
+            HookUI.Start();
+#endif
         }
     }
 
+#if !MINI
     public class HookUI
     {
         protected static UnityEngine.GameObject _Instance = null;
@@ -70,4 +73,5 @@ namespace HookTest
             }
         }
     }
+#endif
 }

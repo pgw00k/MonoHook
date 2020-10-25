@@ -8,6 +8,10 @@ public class HookTarget : MonoBehaviour
 
     static string HookStaticString = "HookStatic";
 
+    /// <summary>
+    /// 用以测试属性读取的HOOK
+    /// <para>属性的控制器其实就是 get_xxx 和 set_xxx </para>
+    /// </summary>
     public static string TestStaticString
     {
         get
@@ -51,6 +55,72 @@ public class HookTarget : MonoBehaviour
         Console.WriteLine("CheckTestString Start");
         Log.text = TestStaticString;
         Console.WriteLine("CheckTestString Over");
+    }
+
+    /// <summary>
+    /// 通过MONO方式进行DLL动态加载，并运行接口函数
+    /// </summary>
+    public void LoadDLLTest()
+    {
+        string assFullName = "HookTest.dll";
+        string classFullName = "HookTest.Program";
+        string methodName = "Main";
+        string log = "";
+
+        if(!System.IO.File.Exists(assFullName))
+        {
+            log = $"{assFullName} is not exist.";
+            Console.WriteLine(log);
+            Log.text = log;
+            return;
+        }
+        System.Reflection.Assembly ass = System.Reflection.Assembly.LoadFile(assFullName);
+        if(ass!=null)
+        {
+            log = $"Load {ass.FullName} success.";
+            Console.WriteLine(log);
+            Log.text = log+"\n";
+        }
+        else
+        {
+            log = $"Load {assFullName} fail.";
+            Console.WriteLine(log);
+            Log.text = log;
+            return;
+        }
+
+        Type classType = ass.GetType(classFullName);
+        if (classType != null)
+        {
+            log = $"Load {classType.FullName} success.";
+            Console.WriteLine(log);
+            Log.text += log+"\n";
+        }
+        else
+        {
+            log = $"Load {classFullName} fail.";
+            Console.WriteLine(log);
+            Log.text = log;
+            return;
+        }
+
+        System.Reflection.MethodInfo method = classType.GetMethod(methodName,
+            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+        if (method != null)
+        {
+            log = $"Load {method.Name} success.";
+            Console.WriteLine(log);
+            Log.text += log + "\n";
+        }
+        else
+        {
+            log = $"Load {methodName} fail.";
+            Console.WriteLine(log);
+            Log.text = log;
+            return;
+        }
+
+        method.Invoke(null, null);
     }
 
     public void Start()
