@@ -7,6 +7,15 @@ public class HookTarget : MonoBehaviour
     public Text Log;
 
     static string HookStaticString = "HookStatic";
+
+    public static string TestStaticString
+    {
+        get
+        {
+            return "This is original,not hook.";
+        }
+    }
+
     public void HookMethod()
     {
         Console.WriteLine("HookMethod Start");
@@ -35,6 +44,13 @@ public class HookTarget : MonoBehaviour
     public static void StaticOutput()
     {
         Console.WriteLine("StaticOutput Start.");
+    }
+
+    public void CheckTestString()
+    {
+        Console.WriteLine("CheckTestString Start");
+        Log.text = TestStaticString;
+        Console.WriteLine("CheckTestString Over");
     }
 
     public void Start()

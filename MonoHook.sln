@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoHook", "MonoHook\MonoHo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HookTest", "HookTest\HookTest.csproj", "{D87A2375-2453-4B50-AF8A-63CF5A27571F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IL2CPPHook", "IL2CPPHook\IL2CPPHook.csproj", "{B9FB87F0-40FE-44ED-B528-3DB813B5A600}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D87A2375-2453-4B50-AF8A-63CF5A27571F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D87A2375-2453-4B50-AF8A-63CF5A27571F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D87A2375-2453-4B50-AF8A-63CF5A27571F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9FB87F0-40FE-44ED-B528-3DB813B5A600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9FB87F0-40FE-44ED-B528-3DB813B5A600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9FB87F0-40FE-44ED-B528-3DB813B5A600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9FB87F0-40FE-44ED-B528-3DB813B5A600}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

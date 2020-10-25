@@ -35,14 +35,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MonoHook\HookPool.cs" />
+    <Compile Include="MonoHook\HookTool.cs" />
     <Compile Include="MonoHook\IL2CPPHelper.cs" />
     <Compile Include="MonoHook\LDasm.cs" />
     <Compile Include="MonoHook\MethodHook.cs" />
