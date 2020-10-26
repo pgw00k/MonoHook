@@ -74,53 +74,66 @@ public class HookTarget : MonoBehaviour
             Log.text = log;
             return;
         }
-        System.Reflection.Assembly ass = System.Reflection.Assembly.LoadFile(assFullName);
-        if(ass!=null)
-        {
-            log = $"Load {ass.FullName} success.";
-            Console.WriteLine(log);
-            Log.text = log+"\n";
-        }
-        else
-        {
-            log = $"Load {assFullName} fail.";
-            Console.WriteLine(log);
-            Log.text = log;
-            return;
-        }
 
-        Type classType = ass.GetType(classFullName);
-        if (classType != null)
+        log = $"get {assFullName} file.\n";
+        Log.text = log;
+
+        try
         {
-            log = $"Load {classType.FullName} success.";
+            System.Reflection.Assembly ass = System.Reflection.Assembly.LoadFile(assFullName);
+            if (ass != null)
+            {
+                log = $"Load {ass.FullName} success.";
+                Console.WriteLine(log);
+                Log.text += log + "\n";
+            }
+            else
+            {
+                log = $"Load {assFullName} fail.";
+                Console.WriteLine(log);
+                Log.text = log;
+                return;
+            }
+
+            Type classType = ass.GetType(classFullName);
+            if (classType != null)
+            {
+                log = $"Load {classType.FullName} success.";
+                Console.WriteLine(log);
+                Log.text += log + "\n";
+            }
+            else
+            {
+                log = $"Load {classFullName} fail.";
+                Console.WriteLine(log);
+                Log.text = log;
+                return;
+            }
+
+            System.Reflection.MethodInfo method = classType.GetMethod(methodName,
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+            if (method != null)
+            {
+                log = $"Load {method.Name} success.";
+                Console.WriteLine(log);
+                Log.text += log + "\n";
+            }
+            else
+            {
+                log = $"Load {methodName} fail.";
+                Console.WriteLine(log);
+                Log.text = log;
+                return;
+            }
+            method.Invoke(null, null);
+        }catch(System.Exception e)
+        {
+            log = $"{e.GetType().Name} : {e.Message}\n{e.StackTrace}\n";
             Console.WriteLine(log);
             Log.text += log+"\n";
         }
-        else
-        {
-            log = $"Load {classFullName} fail.";
-            Console.WriteLine(log);
-            Log.text = log;
-            return;
-        }
 
-        System.Reflection.MethodInfo method = classType.GetMethod(methodName,
-            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-        if (method != null)
-        {
-            log = $"Load {method.Name} success.";
-            Console.WriteLine(log);
-            Log.text += log + "\n";
-        }
-        else
-        {
-            log = $"Load {methodName} fail.";
-            Console.WriteLine(log);
-            Log.text = log;
-            return;
-        }
 
-        method.Invoke(null, null);
     }
 
     public void Start()
