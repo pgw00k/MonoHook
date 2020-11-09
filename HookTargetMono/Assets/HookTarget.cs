@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 public class HookTarget : MonoBehaviour
@@ -7,6 +8,14 @@ public class HookTarget : MonoBehaviour
     public Text Log;
 
     static string HookStaticString = "HookStatic";
+
+    private int _NTest = 666;
+
+
+    /// <summary>
+    /// 测试属性Hook的普通类型
+    /// </summary>
+    public NormalType NT;
 
     /// <summary>
     /// 用以测试属性读取的HOOK
@@ -16,7 +25,25 @@ public class HookTarget : MonoBehaviour
     {
         get
         {
-            return "This is original,not hook.";
+            ///如果原函数太短，会导致无法HOOK
+            Console.WriteLine("Old get");
+            return "This is static string,not hook.";
+        }
+    }
+
+    public string TestString
+    {
+        get
+        {
+            return "This is normal string,not hook.";
+        }
+    }
+
+    public int NTest
+    {
+        get
+        {
+            return _NTest;
         }
     }
 
@@ -50,11 +77,34 @@ public class HookTarget : MonoBehaviour
         Console.WriteLine("StaticOutput Start.");
     }
 
+    /// <summary>
+    /// 在属性中直接赋值返回
+    /// </summary>
     public void CheckTestString()
     {
         Console.WriteLine("CheckTestString Start");
         Log.text = TestStaticString;
         Console.WriteLine("CheckTestString Over");
+    }
+
+    /// <summary>
+    /// 在属性中直接赋值返回
+    /// </summary>
+    public void CheckNormalString()
+    {
+        Console.WriteLine("CheckNormaltring Start");
+        Log.text = NT.TestNormalString;
+        Console.WriteLine("CheckNormaltring Over");
+    }
+
+    /// <summary>
+    /// 从属性读取数字
+    /// </summary>
+    public void CheckNTest()
+    {
+        Console.WriteLine("CheckNTest Start");
+        Log.text = NT.NTest.ToString();
+        Console.WriteLine("CheckNTest Over");
     }
 
     /// <summary>
@@ -140,6 +190,8 @@ public class HookTarget : MonoBehaviour
     {
         //Shell.OpenConsole();
         Console.WriteLine("Console start.");
+
+        NT = new NormalType();
     }
 
     public void OnDestroy()
